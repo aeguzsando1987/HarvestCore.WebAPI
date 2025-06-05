@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "+9UvvCUiuDG4j2fRBPMrOAnwBLRdL0UpI8FKzINl5lM=",
+  "Source": "HarvestCore.WebApi",
+  "BasePath": "_content/HarvestCore.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
