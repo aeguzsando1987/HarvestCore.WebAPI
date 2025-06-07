@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 namespace HarvestCore.WebApi.Repositories
 {
     /// <summary>
-    /// Interfaz genérica para el repositorio de entidades
+    /// Interfaz genérica para el repositorio de entidades que define operaciones CRUD básicas.
+    /// Permite abstraer la implementación concreta del acceso a datos, facilitando
+    /// la reutilización de código y el cambio de tecnologías de persistencia sin afectar
+    /// a la lógica de negocio que depende de esta interfaz.
     /// </summary>
-    /// <typeparam name="T">Tipo de entidad</typeparam>
+    /// <typeparam name="T">Tipo de entidad que será gestionada por el repositorio</typeparam>
     public interface IGenericRepository<T> where T : class
     {
         /// <summary>
