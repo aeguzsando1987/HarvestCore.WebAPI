@@ -138,3 +138,4 @@ C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebA
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.pdb
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.genruntimeconfig.cache
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\ref\HarvestCore.WebApi.dll
+C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.sourcelink.json

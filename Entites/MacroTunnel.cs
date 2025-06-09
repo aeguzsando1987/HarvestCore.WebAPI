@@ -17,6 +17,7 @@ namespace HarvestCore.WebApi.Entites
         [MaxLength(20)]
         public string MacroTunnelKey { get; set; } = string.Empty;
 
+        [Required]
         public int IdHarvestTable { get; set; }
 
         public int? WalkwayNumber { get; set; }
