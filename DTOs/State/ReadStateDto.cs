@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HarvestCore.WebApi.DTOs.Community;
 
 namespace HarvestCore.WebApi.DTOs.State
 {
@@ -13,6 +14,6 @@ namespace HarvestCore.WebApi.DTOs.State
         public string Name { get; set; } = string.Empty;
         public int NumberOfCommunities { get; set; }
         // TODO: Implementar la lista de comunidades
-        // public List<CommunityDto> Communities { get; set; } = new List<CommunityDto>();
+        public List<ReadCommunityDto> Communities { get; set; } = new List<ReadCommunityDto>();
     }
 }
