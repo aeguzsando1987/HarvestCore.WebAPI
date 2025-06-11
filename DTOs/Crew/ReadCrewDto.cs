@@ -22,7 +22,7 @@ namespace HarvestCore.WebApi.DTOs.Crew
         public ReadCommunityDto CommunityDetails { get; set; } = null!; // Anidado para mostrar la comunidad a la que pertenece el crew
 
         public int NumberOfHarvesters { get; set; } // Cantidad de cosechadores que pertenecen al crew
-
+        // Anidado para mostrar la lista de cosechadores que pertenecen al crew
         public List<ReadHarvesterDto> Harvesters { get; set; } = new List<ReadHarvesterDto>();
     }
 }
