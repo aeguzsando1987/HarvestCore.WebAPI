@@ -6,7 +6,6 @@ C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebA
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\HarvestCore.WebApi.dll
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\HarvestCore.WebApi.pdb
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\AutoMapper.dll
-C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Humanizer.dll
@@ -124,6 +123,7 @@ C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebA
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.csproj.CoreCompileInputs.cache
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.sourcelink.json
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\staticwebassets\msbuild.HarvestCore.WebApi.Microsoft.AspNetCore.StaticWebAssets.props
@@ -138,4 +138,3 @@ C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebA
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.pdb
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.genruntimeconfig.cache
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\ref\HarvestCore.WebApi.dll
-C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.sourcelink.json

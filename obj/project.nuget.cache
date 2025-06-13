@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "8KyimhEa1XM=",
+  "dgSpecHash": "K8WBb8naBQ8=",
   "success": true,
   "projectFilePath": "C:\\Users\\E-IPC-L_36\\Desktop\\PROYECTOS\\samples\\HarvestCoreWebAPI\\HarvestCore.WebApi\\HarvestCore.WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\automapper\\14.0.0\\automapper.14.0.0.nupkg.sha512",
-    "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
@@ -86,16 +85,5 @@
     "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\E-IPC-L_36\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Se detectó una versión del paquete fuera de la restricción de dependencia: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requiere AutoMapper (= 12.0.1), pero la versión AutoMapper 14.0.0 ya se resolvió.",
-      "libraryId": "AutoMapper",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

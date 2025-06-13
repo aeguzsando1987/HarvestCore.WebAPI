@@ -1,5 +1,6 @@
 using AutoMapper;
-using HarvestCore.WebApi.DTOs.State;
+using HarvestCore.WebApi.DTOs.State; // Asegúrate que CreateStateDto está aquí
+using HarvestCore.WebApi.DTOs.Community; // Para ReadCommunityDto en ReadStateDto
 using HarvestCore.WebApi.Entites;
 using System.Linq;
 
@@ -7,30 +8,24 @@ namespace HarvestCore.WebApi.Mappings
 {
     public class StateProfile : Profile
     {
-
         public StateProfile()
         {
-            // Mapeo de entidad State a DTO de lectura 
+            // Mapeo de entidad State a DTO de lectura (ReadStateDto)
             CreateMap<State, ReadStateDto>()
-                // Regla para propiedad NumberOfCommunities
-                // Indicamos a AutoMapper que calcule el valor contando los elementos
-                // de la colección Communities de la entidad State
                 .ForMember(dest => dest.NumberOfCommunities, opt => opt.MapFrom(src => src.Communities != null ? src.Communities.Count : 0))
-                // Regla para propiedad Communities
-                // Indicamos a AutoMapper que mapee la colección Communities de la entidad State
-                // al DTO ReadStateDto. Esto entrega la lista de comunidades
+                // Asegúrate que ReadStateDto tiene la propiedad 'Communities' de tipo List<ReadCommunityDto>
+                // y que existe un CommunityProfile para mapear Community a ReadCommunityDto.
                 .ForMember(dest => dest.Communities, opt => opt.MapFrom(src => src.Communities));
-            
-            // Mapeo de DTO de creación a entidad State
-            // No se necesitan reglas especiales ya que el mapeo es directo (i.e. todas las propiedades coinciden
-            // entre el DTO y la entidad)
-            CreateMap<UpdateStateDto, State>();
 
-            // Mapeo de DTO de actualización a entidad State
-            CreateMap<State, UpdateStateDto>()
-                // Indicamos a AutoMapper que mapee todos los miembros (propiedades) del DTO UpdateStateDto
-                // Esta condicion asegura que solo se mepeen los valores del DTO que no sean nulos.
-                // Es util para operaciones de actualizacion parcial (i.e. PATCH)
+            // Mapeo del DTO de Creación (CreateStateDto) a la Entidad State
+            CreateMap<CreateStateDto, State>();
+
+            // Mapeo del DTO de Actualización (UpdateStateDto) a la Entidad State
+            CreateMap<UpdateStateDto, State>()
+                // La condición ForAllMembers es útil si algunas propiedades del DTO fueran opcionales
+                // para permitir actualizaciones parciales (PATCH).
+                // Dado que todas las propiedades en UpdateStateDto son requeridas,
+                // este mapeo funcionará como un reemplazo completo (PUT).
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }

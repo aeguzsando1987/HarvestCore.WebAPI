@@ -1,15 +1,18 @@
-using System;
+using HarvestCore.WebApi.DTOs.Country; // Para los DTOs
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using HarvestCore.WebApi.Entites;
-
 
 namespace HarvestCore.WebApi.Repositories
 {
-    public interface ICountryRepository : IGenericRepository<Country>
+    public interface ICountryRepository
     {
-        // Agregar metodos especificos para el repositorio de paises
-        // ejemploTask<Country?> GetCountryByCodeAsync(string code);
+        Task<ReadCountryDto?> GetCountryByIdAsync(int id);
+        Task<IEnumerable<ReadCountryDto>> GetAllCountriesAsync();
+        Task<ReadCountryDto> CreateCountryAsync(CreateCountryDto createCountryDto);
+        Task<ReadCountryDto?> UpdateCountryAsync(int id, UpdateCountryDto updateCountryDto);
+        Task<bool> DeleteCountryAsync(int id);
+        Task<bool> CountryExistsAsync(int id); // Podría ser útil
+        // Podríamos añadir aquí métodos más específicos si fueran necesarios, 
+        // como GetCountryByCodeAsync(string code) si tuviéramos ese campo y DTO.
     }
 }
