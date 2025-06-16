@@ -24,8 +24,8 @@ namespace HarvestCore.WebApi.Repositories
         public async Task<ReadCountryDto?> GetCountryByIdAsync(int id)
         {
             var countryEntity = await _context.Countries
-                                              .Include(c => c.States) // Incluir States para el mapeo
-                                              .FirstOrDefaultAsync(c => c.IdCountry == id);
+                                                .Include(c => c.States) // Incluir States para el mapeo
+                                                .FirstOrDefaultAsync(c => c.IdCountry == id);
             return _mapper.Map<ReadCountryDto>(countryEntity);
         }
 
