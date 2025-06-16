@@ -25,6 +25,9 @@ namespace HarvestCore.WebApi.Mappings
                 // Condición para no actualizar con valores nulos, permitiendo PATCH.
                 // Esto funciona mejor si las propiedades en UpdateMacroTunnelDto no son requeridas.
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            
+            // Mapeo de la Entidad MacroTunnel a DTO de Actualización especificamente para PATCH (UpdateMacroTunnelDto)
+            CreateMap<MacroTunnel, UpdateMacroTunnelDto>();
         }
     }
 }

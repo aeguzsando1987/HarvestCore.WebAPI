@@ -37,6 +37,10 @@ namespace HarvestCore.WebApi.Mappings
             // Es util para operaciones de actualizacion parcial (i.e. PATCH)
             CreateMap<Crew, UpdateCrewDto>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            
+            // Mapeo de la Entidad Crew a DTO de Actualización especificamente para PATCH (UpdateCrewDto)
+            // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
+            CreateMap<Crew, UpdateCrewDto>();
         }
     }
 }

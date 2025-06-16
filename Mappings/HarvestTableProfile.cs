@@ -21,6 +21,9 @@ namespace HarvestCore.WebApi.Mappings
             // Mapeo del DTO de actualización al DTO de actualización
             CreateMap<UpdateHarvestTableDto, HarvestTable>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Mapeo de la Entidad HarvestTable a DTO de Actualización especificamente para PATCH (UpdateHarvestTableDto)
+            CreateMap<HarvestTable, UpdateHarvestTableDto>();
         
         }
     }

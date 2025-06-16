@@ -36,6 +36,10 @@ namespace HarvestCore.WebApi.Mappings
                 .ForMember(dest => dest.Encoder, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Encoder) ? Convert.FromBase64String(src.Encoder) : null))
                 // Condición para no actualizar con valores nulos, permitiendo PATCH.
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            
+            // Mapeo de la Entidad Harvester a DTO de Actualización especificamente para PATCH (UpdateHarvesterDto)
+            // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
+            CreateMap<Harvester, UpdateHarvesterDto>();
         }
     }
 }

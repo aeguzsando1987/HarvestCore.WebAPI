@@ -63,6 +63,10 @@ namespace HarvestCore.WebApi.Mappings
                     // Esto permite actualizaciones parciales (PATCH) donde solo se modifican los campos proporcionados
                     opts.Condition((src, dest, srcMember) => srcMember != null);
                 });
+            
+            // Mapeo de la Entidad Crop a DTO de Actualización especificamente para PATCH (UpdateCropDto)
+            // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
+            CreateMap<Crop, UpdateCropDto>();
         }
     }
 }

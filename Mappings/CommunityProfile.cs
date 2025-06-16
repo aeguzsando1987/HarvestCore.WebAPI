@@ -48,6 +48,9 @@ namespace HarvestCore.WebApi.Mappings
                 // Esta condicion asegura que solo se mepeen los valores del DTO que no sean nulos.
                 // Es util para operaciones de actualizacion parcial (i.e. PATCH)
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            // Mapeo de la Entidad Community a DTO de Actualización especificamente para PATCH (UpdateCommunityDto)
+            // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
+            CreateMap<Community, UpdateCommunityDto>();
         }
     }
         
