@@ -27,6 +27,9 @@ namespace HarvestCore.WebApi.Mappings
                 // Dado que todas las propiedades en UpdateStateDto son requeridas,
                 // este mapeo funcionará como un reemplazo completo (PUT).
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            // Mapeo de la Entidad State a DTO de Actualización especificamente para PATCH (UpdateStateDto)
+            // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
+            CreateMap<State, UpdateStateDto>();
         }
     }
 }

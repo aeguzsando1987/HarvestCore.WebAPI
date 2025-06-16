@@ -20,6 +20,7 @@ namespace HarvestCore.WebApi.Mappings
             CreateMap<UpdateCountryDto, Country>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
                 srcMember != null));
+            CreateMap<Country, UpdateCountryDto>();
         }
     }
 }

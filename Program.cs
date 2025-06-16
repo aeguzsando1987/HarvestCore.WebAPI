@@ -14,7 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 );
 
 // 3. Registra servicios de controladores y Swagger/con soporte para OpenAPI
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
