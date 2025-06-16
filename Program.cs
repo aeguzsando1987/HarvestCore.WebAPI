@@ -2,6 +2,7 @@ using HarvestCore.WebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using HarvestCore.WebApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,9 @@ builder.Services.AddControllers()
     .AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Registra tus repositorios aquí
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -53,4 +57,3 @@ app.UseAuthorization(); // Configura autorización JWT
 app.MapControllers(); // Configura controladores
 
 app.Run(); // Inicia el servidor
-

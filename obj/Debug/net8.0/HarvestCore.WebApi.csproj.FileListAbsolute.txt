@@ -138,3 +138,7 @@ C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebA
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.pdb
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\HarvestCore.WebApi.genruntimeconfig.cache
 C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\obj\Debug\net8.0\ref\HarvestCore.WebApi.dll
+C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\E-IPC-L_36\Desktop\PROYECTOS\samples\HarvestCoreWebAPI\HarvestCore.WebApi\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
