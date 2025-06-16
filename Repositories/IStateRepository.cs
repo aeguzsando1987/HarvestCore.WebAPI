@@ -9,7 +9,7 @@ namespace HarvestCore.WebApi.Repositories
 {
     public interface IStateRepository
     {
-        Task<ReadStateDto> GetStateByIdAsync(int id);
+        Task<ReadStateDto?> GetStateByIdAsync(int id);
         Task<IEnumerable<ReadStateDto>> GetAllStatesAsync();
         Task<ReadStateDto> CreateStateAsync(CreateStateDto createStateDto);
         Task<ReadStateDto?> UpdateStateAsync(int id, UpdateStateDto updateStateDto);
