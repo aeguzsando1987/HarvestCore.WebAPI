@@ -16,7 +16,7 @@ namespace HarvestCore.WebApi.Mappings
             // Regla para propiedad CommunityDetails
             // Indicamos a AutoMapper que mapee la propiedad Community de la entidad Crew
             // al DTO ReadCrewDto. Esto entrega la comunidad a la que pertenece el crew
-                .ForMember(dest => dest.CommunityDetails, opt => opt.MapFrom(src => src.Community))
+                .ForMember(dest => dest.CommunityDetails, opt => opt.MapFrom(src => src.CommunityEntity))
                 // Regla para propiedad NumberOfHarvesters
                 // Indicamos a AutoMapper que calcule el valor contando los elementos
                 // de la colección Harvesters de la entidad Crew

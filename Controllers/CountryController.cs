@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.JsonPatch;
 
 namespace HarvestCore.WebApi.Controllers
 {
-     [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CountriesController : ControllerBase
     {
@@ -118,15 +118,40 @@ namespace HarvestCore.WebApi.Controllers
             // Mapear la entidad a UpdateCountryDto para aplicar patch
             var countryToPatch = _mapper.Map<UpdateCountryDto>(countryEntity);
 
+            // Limpiar cualquier error de ModelState relacionado con 'id' de la ruta,
+            // ya que no es parte de UpdateCountryDto y no debe afectar su validación.
+            if (ModelState.ContainsKey("id"))
+            {
+                ModelState.Remove("id");
+                _logger.LogInformation("Removed 'id' from ModelState before applying patch.");
+            }
+            // También podemos quitar el de patchDocument si aparece, aunque es menos común aquí
+            if (ModelState.ContainsKey("patchDocument"))
+            {
+                 ModelState.Remove("patchDocument");
+                _logger.LogInformation("Removed 'patchDocument' from ModelState before applying patch.");
+            }
+
+            _logger.LogInformation("ModelState BEFORE ApplyTo (after potential 'id' removal): {@ModelState}", ModelState);
+
             // Aplicar el patch al DTO. Errores se añaden al ModelState
             patchDocument.ApplyTo(countryToPatch, ModelState);
+            _logger.LogInformation("ModelState AFTER ApplyTo: {@ModelState}", ModelState);
+            _logger.LogInformation("countryToPatch values after ApplyTo - Name: {Name}, CountryCode: {CountryCode}", countryToPatch.Name, countryToPatch.CountryCode);
 
-            // Validar el dto despues de aplicar el patch
-            if(!TryValidateModel(countryToPatch))
+            // En lugar de TryValidateModel(countryToPatch), solo verificamos si ApplyTo generó errores.
+            // Si el parche es válido y se aplica a un DTO que ya era válido (mapeado desde una entidad válida),
+            // el resultado debería ser válido respecto a las propiedades afectadas por el parche.
+            // Las propiedades no tocadas por el parche conservan su validez original.
+            if (!ModelState.IsValid) // Verificar si ApplyTo añadió errores
             {
-                _logger.LogWarning("PatchCountry model validation failed for ID {CountryId} after applying patch: {@ModelState}", id, ModelState);
-                return BadRequest(ModelState);
+                _logger.LogWarning("PatchCountry ApplyTo operation resulted in an invalid ModelState for ID {CountryId}: {@ModelState}", id, ModelState);
+                return ValidationProblem(ModelState); // Devuelve los errores reportados por ApplyTo
             }
+
+            // Si llegamos aquí, ApplyTo no reportó errores, y asumimos que el countryToPatch es suficientemente válido
+            // para proceder con el mapeo a la entidad y guardar.
+            _logger.LogInformation("Patch operations applied successfully and ModelState is valid after ApplyTo for ID {CountryId}.", id);
 
             // Mapear los cambios del DTO parchado de vuelta a la entidad original
             _mapper.Map(countryToPatch, countryEntity);

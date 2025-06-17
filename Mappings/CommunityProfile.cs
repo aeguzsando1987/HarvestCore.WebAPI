@@ -37,17 +37,11 @@ namespace HarvestCore.WebApi.Mappings
             // al DTO ReadCommunityDto. Esto entrega la lista de crews
                 .ForMember(dest => dest.Crews, opt => opt.MapFrom(src => src.Crews));
 
-            // Mapeo de la entidad Community a DTO de creación
-            // No se necesitan reglas especiales ya que el mapeo es directo (i.e. todas las propiedades coinciden
-            // entre el DTO y la entidad)
-            CreateMap<Community, CreateCommunityDto>();
+            // Mapeo del DTO de creación a la entidad Community
+            CreateMap<CreateCommunityDto, Community>();
 
-            // Mapeo de la entidad Community a DTO de actualización
-            CreateMap<Community, UpdateCommunityDto>()
-                // Indicamos a AutoMapper que mapee todos los miembros (propiedades) del DTO UpdateCommunityDto
-                // Esta condicion asegura que solo se mepeen los valores del DTO que no sean nulos.
-                // Es util para operaciones de actualizacion parcial (i.e. PATCH)
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            // Mapeo del DTO de actualización a la entidad Community (para PUT)
+            CreateMap<UpdateCommunityDto, Community>();
             // Mapeo de la Entidad Community a DTO de Actualización especificamente para PATCH (UpdateCommunityDto)
             // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
             CreateMap<Community, UpdateCommunityDto>();

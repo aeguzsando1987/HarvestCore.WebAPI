@@ -22,6 +22,8 @@ builder.Services.AddSwaggerGen();
 
 // Registra tus repositorios aquí
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IStateRepository, StateRepository>();
+builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -35,7 +37,11 @@ using(var scope = app.Services.CreateScope())
     try 
     {
         var dbContext = services.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate(); // Aplica migraciones pendientes. Crea la BD si no existe
+        if(dbContext.Database.IsRelational())
+        {
+            dbContext.Database.Migrate(); // Aplica migraciones pendientes. Crea la BD si no existe
+        }
+     
     }
     catch (Exception ex)
     {

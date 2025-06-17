@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HarvestCore.WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class StateController :ControllerBase
     {
         private readonly IStateRepository _stateRepository;

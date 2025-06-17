@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HarvestCore.WebApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d31b6d747fe6c3f8285ff2bbc3b027c8d0682ec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a990f288fbc4c92d1baabf8b170d77b3b8caf2bf")]
 [assembly: System.Reflection.AssemblyProductAttribute("HarvestCore.WebApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HarvestCore.WebApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
