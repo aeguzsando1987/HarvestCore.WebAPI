@@ -150,9 +150,9 @@ namespace HarvestCore.WebApi.Controllers
         public async Task<IActionResult> DeleteCountry(int id)
         {
             _logger.LogInformation("Attempting to delete country with ID: {CountryId}", id);
-            var success = await _countryRepository.DeleteCountryAsync(id);
+            var result = await _countryRepository.DeleteCountryAsync(id);
 
-            if (!success)
+            if (!result)
             {
                 _logger.LogWarning("Country with ID: {CountryId} not found for deletion", id);
                 return NotFound("Country not found");

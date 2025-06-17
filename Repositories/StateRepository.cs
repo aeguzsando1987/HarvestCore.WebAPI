@@ -89,6 +89,5 @@ namespace HarvestCore.WebApi.Repositories
             await _context.SaveChangesAsync();
             return _mapper.Map<ReadStateDto>(statetoUpdate);
         }
-
     }
 }
