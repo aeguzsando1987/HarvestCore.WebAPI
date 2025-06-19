@@ -98,5 +98,11 @@ namespace HarvestCore.WebApi.Repositories
         {
             return await _context.Communities.AnyAsync(e => e.IdCommunity == id);
         }
+
+        public async Task<Community?> GetCommunityEntityByIdAsync(int id)
+        {
+            return await _context.Communities
+                .FirstOrDefaultAsync(c => c.IdCommunity == id);
+        }
     }
 }

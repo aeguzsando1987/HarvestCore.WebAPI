@@ -61,6 +61,9 @@ namespace HarvestCore.WebApi.Data
             // Community: Se configura la relacion con State y un indice para codigo de comunidad
             modelBuilder.Entity<Community>(entity =>
             {
+                entity.Property(cm => cm.CommunityKey)
+                    .HasMaxLength(20);
+
                 entity.HasOne(cm => cm.State)
                     .WithMany(s => s.Communities)
                     .HasForeignKey(s => s.IdState)
@@ -73,6 +76,9 @@ namespace HarvestCore.WebApi.Data
             // Crew: Se configura la relacion con Community y un indice para codigo de crew
             modelBuilder.Entity<Crew>(entity =>
             {
+                entity.Property(cw => cw.CrewKey)
+                    .HasMaxLength(20);
+
                 entity.HasOne(cw => cw.CommunityEntity)
                     .WithMany(cm => cm.Crews)
                     .HasForeignKey(cw => cw.IdCommunity)

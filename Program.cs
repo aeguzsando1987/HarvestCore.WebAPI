@@ -16,7 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 // 3. Registra servicios de controladores y Swagger/con soporte para OpenAPI
 builder.Services.AddControllers()
-    .AddNewtonsoftJson();
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -24,6 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
+builder.Services.AddScoped<ICrewRepository, CrewRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 

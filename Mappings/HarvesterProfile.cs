@@ -19,7 +19,12 @@ namespace HarvestCore.WebApi.Mappings
                 // Calcula NumberOfHarvests contando los registros en la colección Harvests.
                 .ForMember(dest => dest.NumberOfHarvests, opt => opt.MapFrom(src => src.Harvests != null ? src.Harvests.Count : 0))
                 // Mapea la colección de Harvests. Esto requiere un HarvestProfile.
-                .ForMember(dest => dest.Harvests, opt => opt.MapFrom(src => src.Harvests));
+                .ForMember(dest => dest.Harvests, opt => opt.MapFrom(src => src.Harvests))
+                // Mapea la clave del crew desde la entidad CrewEntity
+                .ForMember(dest => dest.Crew, opt => opt.MapFrom(src => 
+                            src.CrewEntity != null ? src.CrewEntity.CrewKey : null))
+                // Mapea los detalles completos del crew desde la entidad CrewEntity
+                .ForMember(dest => dest.CrewDetails, opt => opt.MapFrom(src => src.CrewEntity));
 
             // Mapeo del DTO de Creación (CreateHarvesterDto) a la Entidad Harvester
             CreateMap<CreateHarvesterDto, Harvester>()

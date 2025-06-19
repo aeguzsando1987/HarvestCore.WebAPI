@@ -2,6 +2,7 @@ using HarvestCore.WebApi.DTOs.Community;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HarvestCore.WebApi.Entites;
 
 namespace HarvestCore.WebApi.Repositories
 {
@@ -13,5 +14,7 @@ namespace HarvestCore.WebApi.Repositories
         Task<ReadCommunityDto?> UpdateCommunityAsync(int id, UpdateCommunityDto communityDto);
         Task<bool> DeleteCommunityAsync(int id);
         Task<bool> CommunityExistsAsync(int id); // Útil para validaciones en el controlador
+        Task<Community?> GetCommunityEntityByIdAsync(int id);
+
     }
 }

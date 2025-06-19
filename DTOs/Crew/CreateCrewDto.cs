@@ -12,7 +12,7 @@ namespace HarvestCore.WebApi.DTOs.Crew
         public int IdCommunity { get; set; }
 
         [Required]
-        [StringLength(3, MinimumLength = 1)]
+        [StringLength(20, MinimumLength = 1)]
         public string CrewKey { get; set; } = string.Empty;
 
         [Required]

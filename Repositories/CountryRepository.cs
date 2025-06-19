@@ -83,5 +83,10 @@ namespace HarvestCore.WebApi.Repositories
         {
             return await _context.Countries.AnyAsync(c => c.IdCountry == id);
         }
+
+        public async Task<Country?> GetCountryEntityByIdAsync(int id)
+        {
+            return await _context.Countries.FindAsync(id);
+        }
     }
 }

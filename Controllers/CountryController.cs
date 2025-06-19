@@ -98,76 +98,55 @@ namespace HarvestCore.WebApi.Controllers
         }
 
         // PATCH: api/Countries/5 (Update parcial)
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchCountry(int id, JsonPatchDocument<UpdateCountryDto> patchDocument)
+        [HttpPatch("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PatchCountry(int id, [FromBody] JsonPatchDocument<UpdateCountryDto> patchDocument)
         {
-            _logger.LogInformation("Patching country with ID: {CountryId}", id);
+            // Verificamos si el documento de parche es nulo
             if (patchDocument == null)
             {
-                _logger.LogWarning("Patch document is null for country ID: {CountrId}", id);
-                return BadRequest("Patch document cannot be null");
+                _logger.LogWarning("Patch document is null for country with id: {Id}", id);
+                return BadRequest("Patch document cannot be null.");
             }
 
-            var countryEntity = await _context.Countries.FindAsync(id);
+            // Obtenemos la entidad del país por su ID desde el repositorio
+            var countryEntity = await _countryRepository.GetCountryEntityByIdAsync(id);
+
+            // Si no se encuentra la entidad, retornamos 404 Not Found
             if (countryEntity == null)
             {
-                _logger.LogWarning("Country with ID: {CountryId} not foud for patching", id);
-                return NotFound($"Country with {id} not found");
+                _logger.LogWarning("Country with ID: {Id} not found for patching", id);
+                return NotFound();
             }
 
-            // Mapear la entidad a UpdateCountryDto para aplicar patch
+            // Mapeamos la entidad a un DTO para aplicar los cambios del parche
             var countryToPatch = _mapper.Map<UpdateCountryDto>(countryEntity);
-
-            // Limpiar cualquier error de ModelState relacionado con 'id' de la ruta,
-            // ya que no es parte de UpdateCountryDto y no debe afectar su validación.
-            if (ModelState.ContainsKey("id"))
-            {
-                ModelState.Remove("id");
-                _logger.LogInformation("Removed 'id' from ModelState before applying patch.");
-            }
-            // También podemos quitar el de patchDocument si aparece, aunque es menos común aquí
-            if (ModelState.ContainsKey("patchDocument"))
-            {
-                 ModelState.Remove("patchDocument");
-                _logger.LogInformation("Removed 'patchDocument' from ModelState before applying patch.");
-            }
-
-            _logger.LogInformation("ModelState BEFORE ApplyTo (after potential 'id' removal): {@ModelState}", ModelState);
-
-            // Aplicar el patch al DTO. Errores se añaden al ModelState
+            
+            // Aplicamos el documento de parche al DTO y capturamos errores en ModelState
             patchDocument.ApplyTo(countryToPatch, ModelState);
-            _logger.LogInformation("ModelState AFTER ApplyTo: {@ModelState}", ModelState);
-            _logger.LogInformation("countryToPatch values after ApplyTo - Name: {Name}, CountryCode: {CountryCode}", countryToPatch.Name, countryToPatch.CountryCode);
 
-            // En lugar de TryValidateModel(countryToPatch), solo verificamos si ApplyTo generó errores.
-            // Si el parche es válido y se aplica a un DTO que ya era válido (mapeado desde una entidad válida),
-            // el resultado debería ser válido respecto a las propiedades afectadas por el parche.
-            // Las propiedades no tocadas por el parche conservan su validez original.
-            if (!ModelState.IsValid) // Verificar si ApplyTo añadió errores
+            // Validamos el modelo después de aplicar el parche
+            // TryValidateModel verifica todas las anotaciones de validación en el DTO
+            if (!TryValidateModel(countryToPatch))
             {
-                _logger.LogWarning("PatchCountry ApplyTo operation resulted in an invalid ModelState for ID {CountryId}: {@ModelState}", id, ModelState);
-                return ValidationProblem(ModelState); // Devuelve los errores reportados por ApplyTo
+                _logger.LogWarning("Validation failed after applying patch to country with id: {Id}", id);
+                return ValidationProblem(ModelState);
             }
 
-            // Si llegamos aquí, ApplyTo no reportó errores, y asumimos que el countryToPatch es suficientemente válido
-            // para proceder con el mapeo a la entidad y guardar.
-            _logger.LogInformation("Patch operations applied successfully and ModelState is valid after ApplyTo for ID {CountryId}.", id);
+            // Enviamos el DTO modificado al repositorio para actualizar la entidad en la base de datos
+            var updatedCountryResultDto = await _countryRepository.UpdateCountryAsync(id, countryToPatch);
 
-            // Mapear los cambios del DTO parchado de vuelta a la entidad original
-            _mapper.Map(countryToPatch, countryEntity);
-
-            try
+            // Si la actualización falló en el repositorio, retornamos un error 500
+            if(updatedCountryResultDto == null)
             {
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Country with ID: {CountryId} patched successfully", id);
-            }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex)
-            {
-                _logger.LogError(ex, "Concurrency exception while patching country ID: {CountryId}", id);
-                return Conflict("The record you attempted to edit was modified by another user after you got the original values. Please review and try again.");
+                _logger.LogError("PatchCountry({Id}) - UpdateCountryAsync returned null.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the country.");
             }
 
-            return Ok(_mapper.Map<ReadCountryDto>(countryEntity));
+            // Retornamos 204 No Content para indicar que la operación fue exitosa sin contenido de respuesta
+            _logger.LogInformation("Country with ID: {Id} patched successfully", id);
+            return NoContent();
         }
 
         // DELETE: api/Countries/5

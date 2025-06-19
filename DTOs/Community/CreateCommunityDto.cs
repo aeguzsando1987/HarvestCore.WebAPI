@@ -12,7 +12,7 @@ namespace HarvestCore.WebApi.DTOs.Community
         public int IdState { get; set; }
 
         [Required]
-        [StringLength(3, MinimumLength = 1)]
+        [StringLength(20, MinimumLength = 1)]
         public string CommunityKey { get; set; } = string.Empty;
 
         [Required]

@@ -18,18 +18,15 @@ namespace HarvestCore.WebApi.Controllers
         private readonly ICommunityRepository _communityRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CommunityController> _logger;
-        private readonly ApplicationDbContext _dbContext; // Para la estrategia PATCH
 
         public CommunityController(
             ICommunityRepository communityRepository,
             IMapper mapper,
-            ILogger<CommunityController> logger,
-            ApplicationDbContext dbContext)
+            ILogger<CommunityController> logger)
         {
             _communityRepository = communityRepository ?? throw new ArgumentNullException(nameof(communityRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         // GET: api/community
@@ -95,7 +92,10 @@ namespace HarvestCore.WebApi.Controllers
         }
 
         // PATCH: api/community/{id}
-        [HttpPatch("{id}")]
+        [HttpPatch("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PatchCommunity(int id, [FromBody] JsonPatchDocument<UpdateCommunityDto> patchDocument)
         {
             if (patchDocument == null)
@@ -104,7 +104,7 @@ namespace HarvestCore.WebApi.Controllers
                 return BadRequest("El documento PATCH no puede ser nulo.");
             }
 
-            var communityEntity = await _dbContext.Communities.FindAsync(id);
+            var communityEntity = await _communityRepository.GetCommunityEntityByIdAsync(id);
             if (communityEntity == null)
             {
                 _logger.LogWarning("Comunidad con ID: {Id} no encontrada para PATCH.", id);
@@ -117,49 +117,26 @@ namespace HarvestCore.WebApi.Controllers
             _logger.LogInformation("Aplicando documento PATCH a comunidad con ID: {Id}. Operaciones: {OperationsCount}", id, patchDocument.Operations.Count);
             patchDocument.ApplyTo(communityToPatch, ModelState); // Aplicar cambios y capturar errores de validación del parche
 
-            // Validar el DTO después de aplicar el parche
+            // Validar el DTO después de aplicar el parche. 
+            // ModelState contendrá errores de ApplyTo y de la validación de atributos del DTO.
             if (!TryValidateModel(communityToPatch))
             {
                 _logger.LogWarning("Validación fallida después de aplicar PATCH a comunidad con ID {Id}. ModelState: {ModelState}", id, ModelState);
-                return ValidationProblem(ModelState);
+                return ValidationProblem(ModelState); // Or BadRequest(ModelState)
             }
             
-            // Si ModelState es inválido DESPUÉS de ApplyTo, incluso si TryValidateModel(communityToPatch) fue true antes, 
-            // esto puede indicar problemas con la aplicación del parche en sí (ej. path inválido).
-            if (!ModelState.IsValid)
+            // El repositorio se encarga de mapear el DTO a la entidad y guardar los cambios.
+            var updatedCommunityResultDto = await _communityRepository.UpdateCommunityAsync(id, communityToPatch);
+
+            if (updatedCommunityResultDto == null)
             {
-                _logger.LogWarning("ModelState inválido después de aplicar PATCH (posiblemente por ApplyTo) a comunidad con ID {Id}. ModelState: {ModelState}", id, ModelState);
-                return ValidationProblem(ModelState); 
+                // Esto podría indicar que la entidad no se encontró durante la actualización en el repositorio,
+                // o algún otro error al guardar.
+                _logger.LogError("PatchCommunity({Id}) - UpdateCommunityAsync devolvió null después de aplicar el parche.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Ocurrió un error al actualizar la comunidad.");
             }
 
-            // Mapear los cambios de vuelta a la entidad original
-            _mapper.Map(communityToPatch, communityEntity);
-            _dbContext.Entry(communityEntity).State = EntityState.Modified;
-
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-                _logger.LogInformation("Comunidad con ID: {Id} actualizada exitosamente mediante PATCH.", id);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                if (!await _communityRepository.CommunityExistsAsync(id))
-                {
-                    _logger.LogWarning("Error de concurrencia: Comunidad con ID: {Id} no encontrada durante PATCH SaveChanges.", id);
-                    return NotFound();
-                }
-                else
-                {
-                    _logger.LogError(ex, "Error de concurrencia al actualizar comunidad con ID: {Id} mediante PATCH.", id);
-                    throw;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inesperado al guardar cambios para comunidad con ID: {Id} mediante PATCH.", id);
-                return StatusCode(500, "Un error inesperado ocurrió al procesar su solicitud.");
-            }
-
+            _logger.LogInformation("Comunidad con ID: {Id} actualizada exitosamente mediante PATCH.", id);
             return NoContent();
         }
 
