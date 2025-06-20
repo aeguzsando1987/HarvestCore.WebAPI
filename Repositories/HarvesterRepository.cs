@@ -1,41 +1,69 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using HarvestCore.WebApi.Data;
+using HarvestCore.WebApi.DTOs.Harvester;
 using HarvestCore.WebApi.Entites;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
+
+
+
 namespace HarvestCore.WebApi.Repositories
 {
-    public class HarvesterRepository : GenericRepository<Harvester>, IHarvesterRepository
+    public class HarvesterRepository : IHarvesterRepository
     {
-        public HarvesterRepository(ApplicationDbContext context) : base(context)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        public HarvesterRepository(ApplicationDbContext context, IMapper mapper)
         {
+            _context = context;
+            _mapper = mapper;
         }
 
-        // TODO: Implementar métodos específicos para cosechadores aquí si es necesario en el futuro
-        // Ejemplo:
-        // public async Task<IEnumerable<Harvester>> GetHarvestersByCrewIdAsync(int crewId)
-        // {
-        //     return await _dbSet.Where(h => h.IdCrew == crewId).ToListAsync();
-        // }
+        public async Task<IEnumerable<ReadHarvesterDto>> GetAllHarvestersAsync()
+        {
+            return await _context.Harvesters
+                .Include(h => h.CrewEntity)
+                .Include(h => h.Harvests)
+                .ProjectTo<ReadHarvesterDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
 
-        // public async Task<IEnumerable<Harvester>> GetActiveHarvestersAsync()
-        // {
-        //     return await _dbSet.Where(h => h.IsActive).ToListAsync();
-        // }
+        public async Task<ReadHarvesterDto?> GetHarvesterByIdAsync(int id)
+        { 
+            return await _context.Harvesters
+                .Where(h => h.IdHarvester == id)
+                .ProjectTo<ReadHarvesterDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+           
+        }
 
-        // Ejemplo de sobrescribir un método genérico para incluir datos relacionados:
-        // public override async Task<Harvester?> GetByIdAsync(int id)
-        // {
-        //     return await _dbSet.Include(h => h.Crew) // Cargar la Cuadrilla de forma anticipada
-        //                        .FirstOrDefaultAsync(h => h.IdHarvester == id);
-        // }
+        public async Task<ReadHarvesterDto?> GetHarvesterByKeyAsync(string key)
+        {
+            return await _context.Harvesters
+                .Where(h => h.HarvesterKey == key)
+                .ProjectTo<ReadHarvesterDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
 
-        // public override async Task<IEnumerable<Harvester>> GetAllAsync()
-        // {
-        //     return await _dbSet.Include(h => h.Crew) // Cargar la Cuadrilla para todos los cosechadores
-        //                        .ToListAsync();
-        // }
+        public async Task<IEnumerable<ReadHarvesterDto>> GetHarvestersByCrewKeyAsync(string CrewKey)
+        {
+            return await _context.Harvesters
+                .Where(h => h.CrewEntity.CrewKey == CrewKey)
+                .ProjectTo<ReadHarvesterDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<ReadHarvesterDto> CreateHarvesterAsync(CreateHarvesterDto harvesterDto)
+        {
+            var harvester = _mapper.Map<Harvester>(harvesterDto);
+            _context.Harvesters.Add(harvester);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ReadHarvesterDto>(harvester);
+        }
     }
 }
