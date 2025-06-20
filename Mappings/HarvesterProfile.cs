@@ -44,7 +44,21 @@ namespace HarvestCore.WebApi.Mappings
             
             // Mapeo de la Entidad Harvester a DTO de Actualización especificamente para PATCH (UpdateHarvesterDto)
             // Este mapeo es útil para permitir actualizaciones parciales en campos de entidad (PATCH).
-            CreateMap<Harvester, UpdateHarvesterDto>();
+            CreateMap<Harvester, UpdateHarvesterDto>()
+                // Mapea la propiedad Photo del origen (src) al destino (dest)
+                // Si la propiedad Photo del origen no es nula, convierte el array de bytes a una cadena Base64
+                // La sintaxis opt => opt.MapFrom define una función que especifica cómo mapear esta propiedad
+                // El operador ternario '?' evalúa si src.Photo es nulo y devuelve null si lo es, o la conversión si no lo es
+                .ForMember(dest => dest.Photo, 
+                            opt => opt.MapFrom(src => src.Photo != null ? 
+                            Convert.ToBase64String(src.Photo) : null))
+                // Mapea la propiedad Encoder del origen al destino usando la misma lógica
+                // Convert.ToBase64String convierte el array de bytes a una representación de texto en formato Base64
+                // que es adecuada para transmisión en JSON y almacenamiento en texto plano
+                .ForMember(dest => dest.Encoder, 
+                            opt => opt.MapFrom(src => src.Encoder != null ? 
+                            Convert.ToBase64String(src.Encoder) : null));
+
         }
     }
 }

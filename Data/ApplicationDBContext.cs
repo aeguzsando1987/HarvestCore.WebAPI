@@ -103,6 +103,8 @@ namespace HarvestCore.WebApi.Data
             // MacroTunnel: Se configura la relacion con HarvestTable y un indice para codigo de macrotunnel
             modelBuilder.Entity<MacroTunnel>(entity =>
             {
+                entity.Property(mt => mt.MacroTunnelKey)
+                    .HasMaxLength(20);
                 entity.HasOne(mt => mt.HarvestTable)
                     .WithMany(ht => ht.MacroTunnels)
                     .HasForeignKey(mt => mt.IdHarvestTable)
