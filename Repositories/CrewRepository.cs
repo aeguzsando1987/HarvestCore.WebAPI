@@ -10,6 +10,7 @@ using HarvestCore.WebApi.DTOs.Crew;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HarvestCore.WebApi.Repositories
 {
@@ -114,13 +115,15 @@ namespace HarvestCore.WebApi.Repositories
             return await _context.Crews.AnyAsync(c => c.IdCrew == id);
         }
 
+        public async Task<bool> CrewExistsByKeyAsync(string crewKey)
+        {
+            return await _context.Crews.AnyAsync(c => c.CrewKey.ToLower() == crewKey.ToLower());
+        }
+
         public async Task<Crew?> GetCrewEntityByIdAsync(int id)
         {
             return await _context.Crews
                 .FirstOrDefaultAsync(c => c.IdCrew == id);
         }
-
-
     }
 }
-

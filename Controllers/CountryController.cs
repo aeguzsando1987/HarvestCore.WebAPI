@@ -61,23 +61,39 @@ namespace HarvestCore.WebApi.Controllers
 
         // POST: api/Countries
         [HttpPost]
-        public async Task<ActionResult<ReadCountryDto>> CreateCountry(CreateCountryDto createCountryDto)
+        public async Task<ActionResult<ReadCountryDto>> CreateCountry([FromForm] CreateCountryDto createCountryDto)
         {
-            _logger.LogInformation("Creating country with name: {CountryName}", createCountryDto.CountryCode);
             if(!ModelState.IsValid)
             {
-                _logger.LogWarning("Invalid model state for country creation: {@ModelState}", ModelState);
                 return BadRequest(ModelState);
             }
 
-            var createdCountry = await _countryRepository.CreateCountryAsync(createCountryDto);
-            _logger.LogInformation("Country created successfully with ID: {CountryId}", createdCountry.IdCountry);
-            return CreatedAtAction(nameof(GetCountry), new { id = createdCountry.IdCountry }, createdCountry);
+            try
+            {
+                // 1. Validación Proactiva: Verificamos si ya existe un país con este código.
+                var exists = await _countryRepository.CountryExistsByCodeAsync(createCountryDto.CountryCode);
+                if (exists)
+                {
+                    _logger.LogWarning("Attempted to create a country with a duplicate code: {CountryCode}", createCountryDto.CountryCode);
+                    return Conflict($"A country with code '{createCountryDto.CountryCode}' already exists.");
+                }
+
+                // 2. Creación del país si no existe.
+                var createdCountry = await _countryRepository.CreateCountryAsync(createCountryDto);
+                _logger.LogInformation("Country created successfully with ID: {CountryId}", createdCountry.IdCountry);
+                return CreatedAtAction(nameof(GetCountry), new { id = createdCountry.IdCountry }, createdCountry);
+            }
+            catch (Exception ex)
+            {
+                // 3. Captura de Errores Inesperados: Si algo más falla (ej. DB offline), lo capturamos aquí.
+                _logger.LogError(ex, "An unexpected error occurred while creating country with code {CountryCode}", createCountryDto.CountryCode);
+                return StatusCode(500, "An unexpected internal server error occurred. Please try again later.");
+            }
         }
 
         // PUT: api/Countries/5 (Update completo)
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
+        public async Task<IActionResult> PutCountry(int id, [FromForm] UpdateCountryDto updateCountryDto)
         {
             _logger.LogInformation("Updating country with ID: {CountryId}", id);
             if (!ModelState.IsValid)

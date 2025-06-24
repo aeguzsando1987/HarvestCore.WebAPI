@@ -17,5 +17,6 @@ namespace HarvestCore.WebApi.Repositories
         Task<bool> CrewExistsAsync(int id);
         Task<ReadCrewDto?> GetCrewByKeyAsync(string key);
         Task<Crew?> GetCrewEntityByIdAsync(int id);
+        Task<bool> CrewExistsByKeyAsync(string crewKey);
     }
 }

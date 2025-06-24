@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HarvestCore.WebApi.DTOs.Crew;
 
 namespace HarvestCore.WebApi.Controllers
 {
@@ -14,20 +15,29 @@ namespace HarvestCore.WebApi.Controllers
     public class HarvesterController : ControllerBase
     {
         private readonly IHarvesterRepository _repository;
+        private readonly ICrewRepository _crewRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<HarvesterController> _logger;
 
-        public HarvesterController(IHarvesterRepository repository, IMapper mapper, ILogger<HarvesterController> logger)
+        public HarvesterController(IHarvesterRepository repository, ICrewRepository crewRepository, IMapper mapper, ILogger<HarvesterController> logger)
         {
             _repository = repository;
+            _crewRepository = crewRepository;
             _mapper = mapper;
             _logger = logger;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReadHarvesterDto>>> GetAllHarvesters()
+        public async Task<ActionResult<IEnumerable<ReadHarvesterDto>>> GetAllHarvesters(
+                                            [FromQuery] string? name,
+                                            [FromQuery] DateTime? createdBefore,
+                                            [FromQuery] DateTime? createdAfter,
+                                            [FromQuery] string? locality,
+                                            [FromQuery] int? idCrew,
+                                            [FromQuery] string? crewKey)
         {
-            var harvesters = await _repository.GetAllHarvestersAsync();
+            var harvesters = await _repository.GetAllHarvestersAsync(name, 
+            createdBefore, createdAfter, locality, idCrew, crewKey);
             return Ok(harvesters);
         }
 
@@ -63,23 +73,38 @@ namespace HarvestCore.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReadHarvesterDto>> CreateHarvester([FromBody] CreateHarvesterDto createDto)
+        public async Task<ActionResult<ReadHarvesterDto>> CreateHarvester([FromForm] CreateHarvesterDto createDto)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var existingHarvester = await _repository.GetHarvesterByKeyAsync(createDto.HarvesterKey);
-            if (existingHarvester != null)
+            try
             {
-                _logger.LogWarning("Attempting to create Harvester with duplicate key: {HarvesterKey} failed", createDto.HarvesterKey);
-                return Conflict(new { message = $"A harvester with key '{createDto.HarvesterKey}' already exists." });
-            }
+                var crewExists = await _crewRepository.CrewExistsAsync(createDto.IdCrew);
+                if (!crewExists)
+                {
+                    _logger.LogWarning("Attempted to create a harvester with a non-existent CrewKey: {CrewKey}", createDto.IdCrew);
+                    return BadRequest($"The specified crew with key '{createDto.IdCrew}' does not exist.");
+                }
 
-            var newHarvester = await _repository.CreateHarvesterAsync(createDto);
-            _logger.LogInformation("Harvester created successfully with ID: {HarvesterId}", newHarvester.IdHarvester);
-            return CreatedAtRoute("GetHarvesterById", new { id = newHarvester.IdHarvester }, newHarvester);
+                var existingHarvester = await _repository.GetHarvesterByKeyAsync(createDto.HarvesterKey);
+                if (existingHarvester != null)
+                {
+                    _logger.LogWarning("Attempting to create Harvester with duplicate key: {HarvesterKey} failed", createDto.HarvesterKey);
+                    return Conflict(new { message = $"A harvester with key '{createDto.HarvesterKey}' already exists." });
+                }
+
+                var newHarvester = await _repository.CreateHarvesterAsync(createDto);
+                _logger.LogInformation("Harvester created successfully with ID: {HarvesterId}", newHarvester.IdHarvester);
+                return CreatedAtAction(nameof(GetHarvesterById), new { id = newHarvester.IdHarvester }, newHarvester);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while creating harvester {HarvesterKey}", createDto.HarvesterKey);
+                return StatusCode(500, "An unexpected internal server error occurred.");
+            }
         }
 
         [HttpPut("{id:int}")]

@@ -16,5 +16,7 @@ namespace HarvestCore.WebApi.Repositories
         // Podríamos añadir aquí métodos más específicos si fueran necesarios, 
         // como GetCountryByCodeAsync(string code) si tuviéramos ese campo y DTO.
         Task<Country?> GetCountryEntityByIdAsync(int id);
+        Task<bool> CountryExistsByCodeAsync(string code);
+        
     }
 }

@@ -5,7 +5,12 @@ namespace HarvestCore.WebApi.Repositories
 {
     public interface IHarvesterRepository
     {
-        Task<IEnumerable<ReadHarvesterDto>> GetAllHarvestersAsync(string? name, DateTime? startDate, DateTime? LastModified, int? CrewId);
+        Task<IEnumerable<ReadHarvesterDto>> GetAllHarvestersAsync(string? name, 
+                                            DateTime? createdBefore, 
+                                            DateTime? createdAfter, 
+                                            string? locality, 
+                                            int? idCrew,
+                                            string? crewKey);
         Task<ReadHarvesterDto?> GetHarvesterByIdAsync(int id);
         Task<ReadHarvesterDto?> GetHarvesterByKeyAsync(string Key);
         Task<IEnumerable<ReadHarvesterDto>> GetHarvestersByCrewKeyAsync(string CrewKey);

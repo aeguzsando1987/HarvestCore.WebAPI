@@ -5,13 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HarvestCore.WebApi.Enums; // Para CropCategory si se usa en metodos específicos
+using HarvestCore.WebApi.DTOs.Crop;
+using AutoMapper;
 
 namespace HarvestCore.WebApi.Repositories
 {
-    public class CropRepository : GenericRepository<Crop>, ICropRepository
+    public class CropRepository : ICropRepository
     {
-        public CropRepository(ApplicationDbContext context) : base(context)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        public CropRepository(ApplicationDbContext context, IMapper mapper) 
         {
+            _context = context;
+            _mapper = mapper;
         }
 
         // TODO: Implementar metodos especificos para el repositorio de cultivos

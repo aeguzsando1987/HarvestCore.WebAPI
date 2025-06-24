@@ -25,13 +25,57 @@ namespace HarvestCore.WebApi.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ReadHarvesterDto>> GetAllHarvestersAsync()
+        public async Task<IEnumerable<ReadHarvesterDto>> GetAllHarvestersAsync(string? name,
+                                DateTime? createdBefore,
+                                DateTime? createdAfter,
+                                string? locality,
+                                int? idCrew,
+                                string? crewKey)
         {
-            return await _context.Harvesters
-                .Include(h => h.CrewEntity)
-                .Include(h => h.Harvests)
-                .ProjectTo<ReadHarvesterDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var query = _context.Harvesters.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                var nameTerms = name.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var term in nameTerms)
+                {
+                    query = query.Where(h => h.Name.ToLower().Contains(term.ToLower()));
+                }
+            }
+
+            if (createdBefore.HasValue)
+            {
+                query = query.Where(h => h.CreatedAt <= createdBefore.Value);
+            }
+
+            if (createdAfter.HasValue)
+            {
+                query = query.Where(h => h.CreatedAt >= createdAfter.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(locality))
+            {
+                var localityTerms = locality.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var term in localityTerms)
+                {
+                    query = query.Where(h => h.CrewEntity.CommunityEntity.Name.ToLower().Contains(term.ToLower()));
+                }
+            }
+
+            if (idCrew.HasValue)
+            {
+                query = query.Where(h => h.CrewEntity.IdCrew == idCrew.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(crewKey))
+            {
+                query = query.Where(h => h.CrewEntity.CrewKey.ToLower() == crewKey.ToLower());
+            }
+
+            return await query
+                        .ProjectTo<ReadHarvesterDto>(_mapper.ConfigurationProvider)
+                        .ToListAsync();
         }
 
         public async Task<ReadHarvesterDto?> GetHarvesterByIdAsync(int id)

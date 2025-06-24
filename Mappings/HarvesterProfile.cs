@@ -22,9 +22,9 @@ namespace HarvestCore.WebApi.Mappings
                 .ForMember(dest => dest.Harvests, opt => opt.MapFrom(src => src.Harvests))
                 // Mapea la clave del crew desde la entidad CrewEntity
                 .ForMember(dest => dest.Crew, opt => opt.MapFrom(src => 
-                            src.CrewEntity != null ? src.CrewEntity.CrewKey : null))
+                            src.CrewEntity != null ? src.CrewEntity.CrewKey : null));
                 // Mapea los detalles completos del crew desde la entidad CrewEntity
-                .ForMember(dest => dest.CrewDetails, opt => opt.MapFrom(src => src.CrewEntity));
+                //.ForMember(dest => dest.CrewDetails, opt => opt.MapFrom(src => src.CrewEntity));
 
             // Mapeo del DTO de Creación (CreateHarvesterDto) a la Entidad Harvester
             CreateMap<CreateHarvesterDto, Harvester>()
