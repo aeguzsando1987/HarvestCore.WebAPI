@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using HarvestCore.WebApi.Repositories;
+using HarvestCore.WebApi.Helpers;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +23,16 @@ builder.Services.AddControllers()
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Registra tus repositorios aquí
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "HarvestCore Web API", Version = "v1" });
+    c.SchemaFilter<JsonPatchDocumentSchemaFilter>();
+});
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 builder.Services.AddScoped<ICrewRepository, CrewRepository>();
+builder.Services.AddScoped<IHarvesterRepository, HarvesterRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
