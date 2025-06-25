@@ -8,8 +8,6 @@ namespace HarvestCore.WebApi.Repositories
     public interface ICropRepository
     {
         Task<IEnumerable<ReadCropDto>> GetAllCropsAsync(string? productName,
-                                            DateTime? createdBefore,
-                                            DateTime? createdAfter,
                                             string? cropKey,
                                             string? category,
                                             string? season);

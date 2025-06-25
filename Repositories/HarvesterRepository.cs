@@ -153,5 +153,7 @@ namespace HarvestCore.WebApi.Repositories
             return await _context.Harvesters.AnyAsync(h => h.IdHarvester == id);
         }
 
+       
+
     }
 }
